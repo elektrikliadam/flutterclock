@@ -1,0 +1,58 @@
+name: digital_clock
+description: Digital clock.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.2.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_clock_helper:
+    path: ../flutter_clock_helper
+  cupertino_icons: ^0.1.2
+  simple_animations: ^1.3.4
+  spritewidget: ^0.9.24
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  fonts:
+    - family: MckloudWhite
+      fonts:
+        - asset: third_party/MckloudWhite-qq1.ttf
+
+    - family: MckloudBlack
+      fonts:
+        - asset: third_party/MckloudBlack-32p.ttf
+    - family: MckloudTempest
+      fonts:
+        - asset: third_party/MckloudTempest-AWp.ttf
+
+    - family: MckloudStorm
+      fonts:
+        - asset: third_party/MckloudStorm-DyD.ttf
+    - family: MckloudShadow
+      fonts:
+        - asset: third_party/MckloudShadow-pLd.ttf
+
+    - family: MckloudMisty
+      fonts:
+        - asset: third_party/MckloudMisty-xqm.ttf
+
+  assets:
+  - assets/Hill.png
+  - assets/Sun.png
+  - assets/SunLights.png
+  - assets/Cloud1.png
+  - assets/Cloud2.png
+  - assets/CloudOld.png
+  - assets/Moon.png
+  - assets/Raindrop.png
+  - assets/Snow1.png
+  - assets/Snow2.png
+  - assets/Snow3.png
+  - assets/Foggy.png
