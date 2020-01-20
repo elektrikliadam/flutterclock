@@ -6,12 +6,13 @@ import 'dart:async';
 import 'package:digital_clock/weather_conditions/cloudy.dart';
 import 'package:digital_clock/weather_conditions/snowy.dart';
 import 'package:digital_clock/weather_conditions/thunderstorm.dart';
+import 'package:digital_clock/weather_conditions/windy.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_clock_helper/model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'dart:math' as math;
-import 'LinearGradientTween.dart';
+import './custom_widgets/LinearGradientTween.dart';
 import './weather_conditions/cloudy.dart';
 import './weather_conditions/rainy.dart';
 
@@ -58,32 +59,14 @@ class _DigitalClockState extends State<DigitalClock>
       vsync: this,
     )..repeat(reverse: true).orCancel;
 
-    widget.model.addListener(_updateModel);
     _updateTime();
-    _updateModel();
-  }
-
-  @override
-  void didUpdateWidget(DigitalClock oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.model != oldWidget.model) {
-      oldWidget.model.removeListener(_updateModel);
-      widget.model.addListener(_updateModel);
-    }
   }
 
   @override
   void dispose() {
     _timer?.cancel();
-    widget.model.removeListener(_updateModel);
     widget.model.dispose();
     super.dispose();
-  }
-
-  void _updateModel() {
-    setState(() {
-      // Cause the clock to rebuild when the model changes.
-    });
   }
 
   void _updateTime() {
@@ -162,7 +145,9 @@ class _DigitalClockState extends State<DigitalClock>
     else if (widget.model.weatherCondition == WeatherCondition.snowy)
       return [SnowyWeather()];
     else if (widget.model.weatherCondition == WeatherCondition.thunderstorm)
-      return [ThunderstormyWeather()];
+      return [ThunderStormyWeather()];
+    else if (widget.model.weatherCondition == WeatherCondition.windy)
+      return [WindyWeather()];
     return [];
   }
 
@@ -232,6 +217,7 @@ class _DigitalClockState extends State<DigitalClock>
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter),
     ).lerp(angle <= 90 ? angle / 90 : 1 - ((angle - 90) / 90));
+
     return Container(
       child: Stack(
         children: <Widget>[

@@ -6,16 +6,15 @@ import 'dart:ui' as ui show Image;
 
 ImageMap _images;
 
-class ThunderstormyWeather extends StatefulWidget {
-  ThunderstormyWeather({Key key}) : super(key: key);
+class ThunderStormyWeather extends StatefulWidget {
+  ThunderStormyWeather({Key key}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _ThunderStormyWeatherState();
   }
 }
 
-class _ThunderStormyWeatherState extends State<ThunderstormyWeather> {
+class _ThunderStormyWeatherState extends State<ThunderStormyWeather> {
   bool assetsLoaded = false;
   NodeWithSize rootNode;
 
