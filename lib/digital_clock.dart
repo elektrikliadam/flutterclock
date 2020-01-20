@@ -223,10 +223,6 @@ class _DigitalClockState extends State<DigitalClock>
         children: <Widget>[
           Positioned.fill(child: _buildSunMoon(30.0)),
           ..._buildWeather(),
-          Positioned(
-              top: 120,
-              left: MediaQuery.of(context).size.height / 2 - fontSize / 2,
-              child: _buildClockText(fontSize)),
           Positioned(bottom: -110, child: _buildHill()),
           Positioned(
             top: 0,
@@ -240,6 +236,10 @@ class _DigitalClockState extends State<DigitalClock>
                     _isSimulating = true;
                 }),
           ),
+          Positioned(
+              top: 120,
+              left: MediaQuery.of(context).size.height / 2 - fontSize / 2,
+              child: _buildClockText(fontSize)),
         ],
       ),
       decoration: BoxDecoration(

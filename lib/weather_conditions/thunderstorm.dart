@@ -54,27 +54,27 @@ class WeatherWorld extends NodeWithSize {
     // _thunderstorm.position = Offset(0, 0);
     // addChild(_thunderstorm);
     // _thunderstorm.active = true;
-    _clouds1 = new ThunderStorm(
+    _clouds1 = new Thunder(
       image: _images['assets/Cloud1.png'],
       loopTime: 1.0,
       startFrom: 256.0,
     );
-    _clouds2 = new ThunderStorm(
+    _clouds2 = new Thunder(
         image: _images['assets/Cloud2.png'], loopTime: 1.3, startFrom: 400.0);
-    _clouds3 = new ThunderStorm(
+    _clouds3 = new Thunder(
         image: _images['assets/Cloud1.png'], loopTime: .5, startFrom: 512.0);
 
     addChild(_clouds1);
     addChild(_clouds2);
     addChild(_clouds3);
   }
-  ThunderStorm _clouds1;
-  ThunderStorm _clouds2;
-  ThunderStorm _clouds3;
+  Thunder _clouds1;
+  Thunder _clouds2;
+  Thunder _clouds3;
 }
 
-class ThunderStorm extends Node {
-  ThunderStorm({ui.Image image, double loopTime, double startFrom}) {
+class Thunder extends Node {
+  Thunder({ui.Image image, double loopTime, double startFrom}) {
     // Creates and positions the two cloud sprites.
     _sprites.add(_createSprite(image));
     _sprites[0].position = Offset(1024.0, startFrom);
@@ -94,20 +94,5 @@ class ThunderStorm extends Node {
   Sprite _createSprite(ui.Image image) {
     Sprite sprite = new Sprite.fromImage(image);
     return sprite;
-  }
-
-  set active(bool active) {
-    // Toggle visibility of the cloud layer
-    double opacity;
-    if (active)
-      opacity = 1.0;
-    else
-      opacity = 0.0;
-
-    for (Sprite sprite in _sprites) {
-      sprite.motions.stopAll();
-      sprite.motions.run(new MotionTween<double>(
-          (a) => sprite.opacity = a, sprite.opacity, opacity, 1.0));
-    }
   }
 }

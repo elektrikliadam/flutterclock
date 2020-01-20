@@ -52,13 +52,13 @@ class WeatherWorld extends NodeWithSize {
   WeatherWorld() : super(const Size(2048.0, 2048.0)) {
     _clouds1 = new Wind(
       image: _images['assets/Cloud1.png'],
-      loopTime: 2.0,
+      loopTime: 6.0,
       startFrom: 256.0,
     );
     _clouds2 = new Wind(
-        image: _images['assets/Cloud2.png'], loopTime: 3, startFrom: 400.0);
+        image: _images['assets/Cloud2.png'], loopTime: 7, startFrom: 400.0);
     _clouds3 = new Wind(
-        image: _images['assets/Cloud1.png'], loopTime: 3.5, startFrom: 512.0);
+        image: _images['assets/Cloud1.png'], loopTime: 4.5, startFrom: 512.0);
 
     addChild(_clouds1);
     addChild(_clouds2);
@@ -90,20 +90,5 @@ class Wind extends Node {
   Sprite _createSprite(ui.Image image) {
     Sprite sprite = new Sprite.fromImage(image);
     return sprite;
-  }
-
-  set active(bool active) {
-    // Toggle visibility of the cloud layer
-    double opacity;
-    if (active)
-      opacity = 1.0;
-    else
-      opacity = 0.0;
-
-    for (Sprite sprite in _sprites) {
-      sprite.motions.stopAll();
-      sprite.motions.run(new MotionTween<double>(
-          (a) => sprite.opacity = a, sprite.opacity, opacity, 1.0));
-    }
   }
 }
