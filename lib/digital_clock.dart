@@ -15,24 +15,6 @@ import 'LinearGradientTween.dart';
 import './weather_conditions/cloudy.dart';
 import './weather_conditions/rainy.dart';
 
-enum _Element {
-  background,
-  text,
-  shadow,
-}
-
-final _lightTheme = {
-  _Element.background: Color(0xFF81B3FE),
-  _Element.text: Colors.white,
-  _Element.shadow: Colors.black,
-};
-
-final _darkTheme = {
-  _Element.background: Colors.black,
-  _Element.text: Colors.white,
-  _Element.shadow: Color(0xFF174EA6),
-};
-
 class DigitalClock extends StatefulWidget {
   const DigitalClock(this.model);
 
@@ -46,111 +28,36 @@ class _DigitalClockState extends State<DigitalClock>
     with TickerProviderStateMixin {
   DateTime _dateTime = DateTime.now();
   Timer _timer;
-  AnimationController _flareOpacityAnimController;
   AnimationController _innerFlareAnimController;
-  AnimationController _flareScaleAnimController;
-  AnimationController _starOpacityAnimController;
-  AnimationController _starsOpacityAnimController;
-  AnimationController _shootingStarAnimController;
-  AnimationController _cloudyAnimController;
   AnimationController _mdSpeedAnimationController;
-  AnimationController _foggyAnimController;
 
   bool _isSunDown = false;
   double angle = 0.0;
   bool _isSimulating = false;
-  Animation<Color> flareAnim;
-  Animation _opacityAnimation;
 
   @override
   void initState() {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
-      // DeviceOrientation.landscapeLeft,
     ]);
     super.initState();
-    _foggyAnimController =
-        AnimationController(vsync: this, duration: Duration(seconds: 5))
-          ..repeat(reverse: true);
-    _flareOpacityAnimController = AnimationController(
-        vsync: this,
-        duration: Duration(
-          milliseconds: 2000,
-        ))
-      ..forward();
-    CurvedAnimation _curve = CurvedAnimation(
-        parent: _flareOpacityAnimController, curve: Curves.easeOutBack);
-
-    _opacityAnimation = Tween(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(_curve);
-
-    _opacityAnimation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        _flareOpacityAnimController.reset();
-        _flareOpacityAnimController.forward();
-      } else if (status == AnimationStatus.dismissed) {
-        _flareOpacityAnimController.forward();
-      }
-    });
 
     _innerFlareAnimController = AnimationController(
-      lowerBound: .5, // .5
-      upperBound: .8, // .7
-
+      lowerBound: .5,
+      upperBound: .8,
       vsync: this,
       duration: Duration(
         milliseconds: 500,
       ),
     )..repeat(reverse: true);
-    _flareScaleAnimController = AnimationController(
-      lowerBound: .1, //.3
-      upperBound: .45,
-      // lowerBound: .75,
-      // upperBound: .85,
-      vsync: this,
-      duration: Duration(
-        milliseconds: 1000,
-      ),
-    )..repeat(reverse: false);
 
-    flareAnim = ColorTween(
-            begin: Colors.red,
-            // begin: Colors.yellow[50].withOpacity(.2),
-            end: Colors.transparent)
-        .animate(_flareOpacityAnimController);
-
-    _starOpacityAnimController = AnimationController(
-        vsync: this,
-        duration: Duration(
-          seconds: 3,
-        ))
-      ..repeat(reverse: true);
-
-    _starsOpacityAnimController = AnimationController(
-        vsync: this,
-        duration: Duration(
-          seconds: 3,
-        ));
     _mdSpeedAnimationController = new AnimationController(
       duration: const Duration(milliseconds: 3000),
       lowerBound: .8,
       upperBound: 1,
       vsync: this,
-    );
+    )..repeat(reverse: true).orCancel;
 
-    _mdSpeedAnimationController.repeat(reverse: true).orCancel;
-
-    _shootingStarAnimController = AnimationController(
-        vsync: this,
-        duration: Duration(
-          milliseconds: 300,
-        ))
-      ..repeat().orCancel;
-
-    _cloudyAnimController =
-        AnimationController(vsync: this, duration: Duration(seconds: 3));
     widget.model.addListener(_updateModel);
     _updateTime();
     _updateModel();
@@ -216,7 +123,6 @@ class _DigitalClockState extends State<DigitalClock>
       alignment: Alignment.topCenter,
       child: Transform.rotate(
         origin: Offset(0, MediaQuery.of(context).size.height - radius * 2),
-        // angle: 0,
         angle: (math.pi / 180) * (angle - 90),
         child: Transform.rotate(
           alignment: Alignment.center,
@@ -231,21 +137,6 @@ class _DigitalClockState extends State<DigitalClock>
                 radius: 40,
               ),
             ),
-            // CircleAvatar(
-            //   backgroundColor: Colors.transparent,
-            //   radius: 40,
-            //   child: Container(
-            //     decoration: BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       gradient: RadialGradient(
-            //         colors: [
-            //           Colors.transparent,
-            //           Colors.yellow[200].withOpacity(.5)
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             ScaleTransition(
               scale: CurvedAnimation(
                   parent: _innerFlareAnimController, curve: Curves.easeOutBack),
@@ -255,20 +146,6 @@ class _DigitalClockState extends State<DigitalClock>
                 radius: 33,
               ),
             ),
-            // ScaleTransition(
-            //   scale: CurvedAnimation(
-            //       parent: _flareScaleAnimController, curve: Curves.easeOutBack),
-            //   alignment: Alignment.center,
-            //   child: FadeTransition(
-            //     opacity: _opacityAnimation,
-            //     child: CircleAvatar(
-            //       // backgroundColor: Colors.red,
-            //       backgroundColor: Colors.yellow[100].withOpacity(.3),
-            //       radius: 40,
-            //     ),
-            //   ),
-            // ),
-
             _buildCircle(
                 _isSunDown ? "assets/Moon.png" : "assets/Sun.png", radius),
           ]),
@@ -332,8 +209,6 @@ class _DigitalClockState extends State<DigitalClock>
 
   @override
   Widget build(BuildContext context) {
-    var _foggyOpacityAnim = ColorTween(begin: Colors.white, end: Colors.black);
-
     LinearGradient _backgroundGradient = LinearGradientTween(
       begin: LinearGradient(
           tileMode: TileMode.mirror,
@@ -387,42 +262,5 @@ class _DigitalClockState extends State<DigitalClock>
             : _backgroundGradient,
       ),
     );
-
-    // final _buildOthers = Container(
-    //   child: Stack(children: <Widget>[
-    //     Positioned.fill(
-    //       child: _isSunDown
-    //           ? AnimatedOpacity(
-    //               duration: Duration(seconds: 10),
-    //               opacity: Tween(
-    //                 begin: 0.0,
-    //                 end: 1.0,
-    //               ).animate(_starsOpacityAnimController).value,
-    //               child: Container(color: Colors.red),
-    //             )
-    //           // ? FadeTransition(
-    //           //     opacity: Tween(
-    //           //       begin: 0.0,
-    //           //       end: 1.0,
-    //           //     ).animate(_starsOpacityAnimController),
-    //           //     child: Container(
-    //           //       color: Colors.red,
-    //           //     )
-    //           //     //   child: buildStars(
-    //           //     //       _starOpacityAnimController, _shootingStarAnimController),
-    //           //     )
-    //           : Container(),
-    //     ),
-    //     ..._buildWeather(),
-    //   ]),
-    // );
-    // return RainWeather();
-
-    // return Container(
-    //   child: _buildOthers,
-    //   decoration: BoxDecoration(
-    //     gradient: _backgroundGradient,
-    //   ),
-    // );
   }
 }
