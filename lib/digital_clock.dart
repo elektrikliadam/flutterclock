@@ -175,9 +175,7 @@ class _DigitalClockState extends State<DigitalClock>
     );
   }
 
-  Widget _buildClockText() {
-    final fontSize = MediaQuery.of(context).size.width / 6.5;
-
+  Widget _buildClockText(double fontSize) {
     final hour =
         DateFormat(widget.model.is24HourFormat ? 'HH' : 'hh').format(_dateTime);
 
@@ -209,6 +207,8 @@ class _DigitalClockState extends State<DigitalClock>
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = MediaQuery.of(context).size.width / 6.5;
+
     LinearGradient _backgroundGradient = LinearGradientTween(
       begin: LinearGradient(
           tileMode: TileMode.mirror,
@@ -237,7 +237,10 @@ class _DigitalClockState extends State<DigitalClock>
         children: <Widget>[
           Positioned.fill(child: _buildSunMoon(30.0)),
           ..._buildWeather(),
-          Positioned(top: 120, left: 150, child: _buildClockText()),
+          Positioned(
+              top: 120,
+              left: MediaQuery.of(context).size.height / 2 - fontSize / 2,
+              child: _buildClockText(fontSize)),
           Positioned(bottom: -110, child: _buildHill()),
           Positioned(
             top: 0,
